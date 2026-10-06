@@ -1,0 +1,778 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>のこすノート｜無料で作れる終活ノート</title>
+<meta name="description" content="簡単な入力だけで、あなただけの終活ノート（エンディングノート）ができます。登録不要・無料。入力した内容はこの端末の中だけに保存されます。">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-J3LVP6C2L8"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-J3LVP6C2L8', { send_page_view: false });
+</script>
+<style>
+:root{
+  --page:#f4f4f1; --surface:#fff; --ink:#1d1d1b; --sub:#5b5b57; --line:#dcdcd6;
+  --accent:#2a78d6; --accent-weak:#e8f1fb; --good:#2f8a4f; --warn:#b4560b;
+  --radius:12px; --fs:18px;
+}
+html.large{ --fs:21px; }
+*{box-sizing:border-box}
+html{font-size:var(--fs)}
+body{margin:0;background:var(--page);color:var(--ink);
+  font-family:system-ui,-apple-system,"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic UI","Meiryo",sans-serif;
+  line-height:1.7;-webkit-text-size-adjust:100%}
+a{color:var(--accent)}
+.wrap{max-width:760px;margin:0 auto;padding:0 16px}
+header.bar{background:var(--surface);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:10}
+header.bar .wrap{display:flex;align-items:center;gap:12px;min-height:56px}
+.brand{font-weight:700;font-size:1.05rem;text-decoration:none;color:var(--ink)}
+.brand small{font-weight:400;color:var(--sub);font-size:.7rem;margin-left:6px}
+.spacer{flex:1}
+.fs-toggle{white-space:nowrap;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:4px 12px;font-size:.8rem;cursor:pointer;color:var(--ink)}
+main{padding:24px 0 96px}
+h1{font-size:1.6rem;line-height:1.4;margin:.2em 0 .4em}
+h2{font-size:1.25rem;margin:1.4em 0 .5em}
+.lead{color:var(--sub)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:20px;margin:16px 0}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:52px;padding:10px 22px;border-radius:10px;
+  border:1px solid var(--accent);background:var(--accent);color:#fff;font-size:1rem;font-weight:600;cursor:pointer;text-decoration:none}
+.btn.ghost{background:var(--surface);color:var(--accent)}
+.btn.plain{background:transparent;border-color:var(--line);color:var(--ink);font-weight:400}
+.btn.block{display:flex;width:100%}
+.btn-row{display:flex;flex-wrap:wrap;gap:12px;margin-top:16px}
+.feat{display:grid;gap:12px;margin:20px 0}
+.feat div{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px}
+.feat b{display:block}
+.note{font-size:.85rem;color:var(--sub)}
+.warnbox{background:#fff7ec;border:1px solid #f0d2ac;border-radius:10px;padding:12px 14px;font-size:.9rem}
+/* progress */
+.prog{height:12px;background:#e6e6e0;border-radius:999px;overflow:hidden}
+.prog i{display:block;height:100%;background:var(--good);border-radius:999px;transition:width .3s}
+.part-title{font-size:1rem;color:var(--sub);margin:28px 0 8px;font-weight:600}
+.ch{display:flex;align-items:center;gap:14px;width:100%;text-align:left;background:var(--surface);border:1px solid var(--line);
+  border-radius:var(--radius);padding:14px 16px;margin:10px 0;cursor:pointer;font-size:1rem;color:var(--ink)}
+.ch:hover{border-color:var(--accent)}
+.ch .no{flex:none;width:40px;height:40px;border-radius:50%;background:var(--accent-weak);color:var(--accent);display:flex;align-items:center;justify-content:center;font-weight:700}
+.ch .t{flex:1}
+.ch .t b{display:block}
+.ch .t span{font-size:.8rem;color:var(--sub)}
+.ch .pct{flex:none;font-size:.85rem;color:var(--sub);min-width:4.5em;text-align:right}
+.ch.done .no{background:var(--good);color:#fff}
+.ch[disabled]{opacity:.55;cursor:default}
+.ch[disabled]:hover{border-color:var(--line)}
+/* form */
+.field{margin:22px 0}
+.field > label, .field > .lbl{display:block;font-weight:600;margin-bottom:6px}
+.opt-badge{font-size:.7rem;background:#e6e6e0;color:#5b5b57;border-radius:4px;padding:1px 6px;margin-left:6px;vertical-align:3px;font-weight:600}
+.req{font-size:.7rem;background:#c33;color:#fff;border-radius:4px;padding:1px 6px;margin-left:6px;vertical-align:2px}
+.help{font-size:.82rem;color:var(--sub);margin:-2px 0 6px}
+input[type=text],textarea,select{width:100%;font:inherit;font-size:1rem;padding:12px 14px;border:1px solid #bdbdb5;border-radius:10px;background:#fff;color:var(--ink)}
+input[type=text]:focus,textarea:focus,select:focus{outline:3px solid var(--accent-weak);border-color:var(--accent)}
+textarea{min-height:140px;resize:vertical}
+.ymd{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.ymd input{width:6.5em}
+.ymd select{width:auto;min-width:5em}
+.wareki{font-size:.85rem;color:var(--sub);min-width:6em}
+.derived{margin-top:8px;font-size:.9rem;color:var(--sub)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{min-height:44px;padding:8px 18px;border-radius:999px;border:1px solid #bdbdb5;background:#fff;font-size:1rem;cursor:pointer;color:var(--ink)}
+.chip.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.hints{margin:0 0 8px;padding:10px 14px;background:var(--accent-weak);border-radius:10px;font-size:.85rem}
+.hints b{display:block;color:var(--accent);font-size:.8rem}
+.row{border:1px dashed #c9c9c1;border-radius:var(--radius);padding:4px 16px 12px;margin:12px 0;background:#fcfcfa}
+.row-head{display:flex;justify-content:space-between;align-items:center;margin-top:10px}
+.row-head b{font-size:.95rem}
+.del{background:none;border:none;color:#a33;font-size:.85rem;cursor:pointer;padding:6px}
+.row .field{margin:14px 0}
+.chnav{display:flex;gap:12px;margin-top:32px}
+.chnav .btn{flex:1}
+.crumb{background:none;border:none;color:var(--accent);font-size:.9rem;cursor:pointer;padding:0;margin-bottom:8px}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:#333;color:#fff;padding:8px 18px;border-radius:999px;font-size:.85rem;opacity:0;transition:opacity .3s;pointer-events:none;z-index:20}
+.toast.show{opacity:.92}
+/* paper (preview & print) */
+.paper{background:#fff;border:1px solid var(--line);border-radius:4px;padding:40px 36px;margin:20px 0;box-shadow:0 2px 10px rgba(0,0,0,.05);
+  font-family:"Hiragino Mincho ProN","Yu Mincho","YuMincho","Noto Serif JP",serif;line-height:1.9}
+.paper .cover{text-align:center;padding:60px 0 40px;border-bottom:1px solid #ccc;margin-bottom:24px}
+.paper .cover .ttl{font-size:2rem;letter-spacing:.3em;margin:0}
+.paper .cover .who{font-size:1.2rem;margin-top:36px}
+.paper .cover .dt{font-size:.9rem;color:#555;margin-top:12px}
+.paper h3{font-size:1.2rem;border-left:5px solid #555;padding-left:10px;margin:36px 0 12px}
+.paper h4.grp{font-size:1.08rem;border-bottom:1px solid #999;padding-bottom:2px;margin-top:28px}
+.paper h4{font-size:1rem;margin:20px 0 6px;color:#333}
+.paper table{width:100%;border-collapse:collapse;margin:6px 0 12px;font-size:.95rem}
+.paper th,.paper td{border:1px solid #bbb;padding:8px 10px;vertical-align:top;text-align:left}
+.paper th{width:32%;background:#f5f5f2;font-weight:600}
+.paper .txt{white-space:pre-wrap;border:1px solid #bbb;padding:10px 12px;min-height:3em;margin:6px 0 12px}
+.paper .blank{min-height:5em}
+.paper .foot{margin-top:40px;font-size:.75rem;color:#777;text-align:center;font-family:system-ui,sans-serif}
+.paper .empty-msg{color:#888;font-size:.9rem}
+.opt{display:flex;gap:10px;align-items:center;font-size:.9rem;margin:8px 0}
+.opt input{width:22px;height:22px}
+@media (min-width:640px){ .feat{grid-template-columns:repeat(3,1fr)} }
+@media (max-width:480px){ .paper{padding:24px 16px} h1{font-size:1.4rem} .brand small{display:none} }
+@media print{
+  @page{size:A4;margin:16mm 14mm}
+  html{font-size:11pt}
+  body{background:#fff}
+  header.bar,.no-print,.toast{display:none!important}
+  main{padding:0}
+  .wrap{max-width:none;padding:0}
+  .paper{border:none;box-shadow:none;padding:0;margin:0}
+  .paper .cover{height:240mm;display:flex;flex-direction:column;justify-content:center;border:none;margin:0;break-after:page}
+  .paper .chap{break-before:page}
+  .paper .chap:first-of-type{break-before:auto}
+  .paper h3,.paper h4{break-after:avoid}
+  .paper .foot{margin-top:10px}
+  .paper th,.paper td{padding:5px 8px}
+  .paper table,.paper .txt{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<header class="bar no-print">
+  <div class="wrap">
+    <a class="brand" href="#top">のこすノート<small>無料で作れる終活ノート</small></a>
+    <span class="spacer"></span>
+    <button class="fs-toggle" id="fsToggle" type="button">文字を大きく</button>
+  </div>
+</header>
+<main><div class="wrap" id="app"></div></main>
+<div class="toast" id="toast">保存しました</div>
+<input type="file" id="importFile" accept="application/json,.json" hidden>
+
+<script>
+(function(){
+'use strict';
+var STORE_KEY = 'nokosu-note-v1';
+var UI_KEY = 'nokosu-note-ui';
+
+/* ===== 章の定義 ===== */
+var COST = ['預貯金','保険','年金','その他','用意していない'];
+var WHO = ['配偶者','子','親族','第三者','特に考えていない'];
+var ERAS = ['小学校','中学校','高校','大学・専門学校','その他'];
+var CHAPTERS = [
+  {id:'basic', part:1, no:1, title:'基本情報', sub:'お名前・生年月日・住所など',
+   lead:'まずは、あなたご自身のことから。分かるところだけで大丈夫です。',
+   fields:[
+    {k:'name', label:'お名前', type:'text', req:true, ph:'例：山田 花子'},
+    {k:'kana', label:'ふりがな', type:'text', ph:'例：やまだ はなこ'},
+    {k:'birth', label:'生年月日', type:'ymd'},
+    {k:'blood', label:'血液型', type:'chips', options:['A型','B型','O型','AB型','わからない']},
+    {k:'zip', label:'郵便番号', type:'text', ph:'例：123-4567', mode:'numeric'},
+    {k:'address', label:'現住所', type:'text', ph:'例：〇〇県〇〇市〇〇町1-2-3'},
+    {k:'honseki', label:'本籍地', type:'text', help:'戸籍謄本に書かれている場所です。分からなければ空欄でかまいません。'},
+    {k:'phone', label:'携帯電話', type:'text', mode:'tel'},
+    {k:'work', label:'勤務先・所属', type:'text', help:'お勤め先、または地域の会・サークルなど'},
+    {k:'memo', label:'メモ', type:'textarea', hints:['よく呼ばれるあだ名','好きなもの・趣味','自分の性格をひとことで']}
+   ]},
+  {id:'youth', part:1, no:2, optional:true, title:'自分史（子ども時代〜学生時代）', sub:'生まれた時のこと・学校の思い出',
+   lead:'生まれた時から学生時代までを振り返ります。思い出したことを、少しずつ書き足していけます。',
+   fields:[
+    {k:'birthplace', label:'生まれた場所', type:'text', ph:'例：〇〇市の〇〇病院', help:'病院名や町の名前など'},
+    {k:'birthweight', label:'生まれた時の体重', type:'text', ph:'例：3,200g'},
+    {k:'nameorigin', label:'名前の由来', type:'textarea', hints:['誰が名付けたか','込められた思い','聞いたことのあるエピソード']},
+    {k:'kinder', label:'保育園・幼稚園', type:'text'},
+    {k:'childhood', label:'小さい頃の思い出', type:'textarea', hints:['よく遊んだ場所や遊び','好きだった食べ物','家族との思い出']},
+    {k:'schools', label:'学校', type:'repeat', rowLabel:'学校', add:'学校を追加する', min:1, fields:[
+      {k:'kind', label:'種類', type:'chips', options:ERAS},
+      {k:'name', label:'学校名', type:'text'},
+      {k:'from', label:'入学した年', type:'year'},
+      {k:'to', label:'卒業した年', type:'year'},
+      {k:'memo', label:'思い出やエピソード', type:'textarea', hints:['先生や友だち','部活動','行事の思い出']}
+    ]}
+   ]},
+  {id:'life', part:1, no:3, optional:true, title:'自分史（仕事・結婚・子育て）', sub:'働いた場所・家族との歩み',
+   lead:'社会に出てからの歩みです。書きたいところだけ書けば十分です。',
+   fields:[
+    {k:'jobs', label:'勤め先', type:'repeat', rowLabel:'勤め先', add:'勤め先を追加する', min:1, fields:[
+      {k:'name', label:'会社名・仕事の内容', type:'text'},
+      {k:'from', label:'働きはじめた年', type:'year'},
+      {k:'to', label:'辞めた年', type:'year', help:'今も働いている場合は空欄で'}
+    ]},
+    {k:'workmemo', label:'仕事の思い出', type:'textarea', hints:['うれしかった仕事','苦労したこと','仕事で学んだこと']},
+    {k:'marriage', label:'結婚生活の思い出', type:'textarea', hints:['出会い','結婚式のこと','一緒に行った場所']},
+    {k:'children', label:'子育ての思い出', type:'textarea', hints:['生まれた日のこと','子育てで大変だったこと','成長して感じたこと']}
+   ]},
+  {id:'message', part:1, no:4, title:'家族・大切な人へのメッセージ', sub:'伝えておきたい想い',
+   lead:'家族や大切な人へ、伝えておきたい言葉を残しましょう。宛先ごとに分けて書けます。',
+   fields:[
+    {k:'messages', label:'メッセージ', type:'repeat', rowLabel:'メッセージ', add:'宛先を追加する', min:1, fields:[
+      {k:'to', label:'宛先', type:'text', ph:'例：妻の〇〇へ／子どもたちへ'},
+      {k:'body', label:'伝えたいこと', type:'textarea', hints:['ありがとうと伝えたいこと','覚えていてほしいこと','これからのお願い']}
+    ]}
+   ]},
+  {id:'medical', part:2, no:5, title:'医療・介護', sub:'延命治療・告知・介護の希望',
+   lead:'病気や介護が必要になった時の希望です。家族が判断に迷わないための大切な情報です。',
+   fields:[
+    {k:'lifesupport', label:'延命治療について', type:'chips', options:['できる限りしてほしい','過度な延命治療は望まない','家族に任せる']},
+    {k:'notice', label:'病名・余命の告知', type:'chips', options:['病名も余命も伝えてほしい','病名だけ伝えてほしい','伝えないでほしい','家族に任せる']},
+    {k:'organ', label:'臓器提供', type:'chips', options:['提供する','提供しない','家族に任せる','決めていない']},
+    {k:'doctor', label:'かかりつけの病院・医師', type:'text', ph:'例：〇〇クリニック　〇〇先生'},
+    {k:'health', label:'持病・アレルギー・飲んでいる薬', type:'textarea'},
+    {k:'carer', label:'介護をお願いしたい人', type:'chips', options:WHO},
+    {k:'carername', label:'お願いしたい人の名前', type:'text'},
+    {k:'careplace', label:'介護を受けたい場所', type:'chips', options:['自宅','施設','家族に任せる']},
+    {k:'carecost', label:'介護の費用', type:'chips', options:COST},
+    {k:'medmemo', label:'メモ', type:'textarea'}
+   ]},
+  {id:'guardian', part:2, no:6, title:'後見', sub:'判断が難しくなった時のこと',
+   lead:'認知症などで判断が難しくなった時に、財産の管理や契約を誰に任せるかです。',
+   fields:[
+    {k:'gtype', label:'任意後見の契約', type:'chips', options:['契約している','していない','わからない'], help:'任意後見とは、元気なうちに将来の支援者を自分で決めて契約しておく制度です。'},
+    {k:'gwho', label:'お願いしたい人', type:'chips', options:WHO},
+    {k:'gname', label:'お願いしたい人の名前・連絡先', type:'text'},
+    {k:'gcost', label:'費用', type:'chips', options:COST},
+    {k:'gmemo', label:'メモ', type:'textarea'}
+   ]},
+  {id:'funeral', part:2, no:7, title:'葬儀', sub:'葬儀の形・知らせてほしい人',
+   lead:'葬儀は亡くなってすぐに決めることが多く、家族が一番迷うところです。',
+   fields:[
+    {k:'fstyle', label:'葬儀の形', type:'chips', options:['一般葬','家族葬','一日葬','火葬のみ','家族に任せる']},
+    {k:'fcompany', label:'葬儀社', type:'chips', options:['決めている・会員になっている','決めていない']},
+    {k:'fcname', label:'葬儀社の名前・連絡先', type:'text'},
+    {k:'freligion', label:'宗教・宗派・お付き合いのあるお寺など', type:'text'},
+    {k:'fphoto', label:'遺影に使ってほしい写真', type:'text', ph:'例：居間の棚のアルバムの〇〇の写真', help:'写真の場所や、どの写真かを書いておきましょう。'},
+    {k:'fclothes', label:'着せてほしい服・棺に入れてほしいもの', type:'text'},
+    {k:'fspeech', label:'弔辞をお願いしたい人', type:'text'},
+    {k:'finvite', label:'亡くなったことを知らせてほしい人', type:'textarea', help:'名前と連絡先を書いておくと、家族が助かります。'},
+    {k:'fcost', label:'葬儀の費用', type:'chips', options:COST},
+    {k:'fmemo', label:'その他の希望', type:'textarea'}
+   ]},
+  {id:'grave', part:2, no:8, title:'お墓・仏壇', sub:'お墓・仏壇の準備と希望',
+   lead:'お墓や仏壇をどうするかは、家族の負担に直結します。今の状況と希望を残しましょう。',
+   fields:[
+    {k:'grave', label:'お墓', type:'chips', options:['ある・準備済み','まだない','お墓はいらない']},
+    {k:'graveplace', label:'お墓の場所・管理しているお寺や霊園', type:'text'},
+    {k:'gravewish', label:'埋葬の希望', type:'chips', options:['今のお墓に','新しくお墓を','永代供養・納骨堂','樹木葬','散骨','家族に任せる']},
+    {k:'butsudan', label:'仏壇', type:'chips', options:['ある','ない']},
+    {k:'butsudanwish', label:'仏壇をどうしてほしいか', type:'chips', options:['引き継いでほしい','処分してよい','家族に任せる']},
+    {k:'gcost2', label:'お墓・仏壇の費用', type:'chips', options:COST},
+    {k:'gravememo', label:'メモ', type:'textarea'}
+   ]},
+  {id:'will', part:2, no:9, title:'遺言', sub:'遺言書の有無・保管場所',
+   lead:'遺言書があるかどうか、どこにあるかを家族に伝えておきましょう。',
+   fields:[
+    {k:'willtype', label:'遺言書', type:'chips', options:['公正証書遺言がある','自筆証書遺言がある','ない','これから作りたい']},
+    {k:'willyear', label:'作成した年', type:'year'},
+    {k:'willplace', label:'保管場所', type:'text', ph:'例：〇〇公証役場／法務局／自宅の金庫', help:'自筆の遺言書を法務局に預けている場合は、その旨も書きましょう。'},
+    {k:'willexec', label:'遺言執行者（手続きを任せた人）', type:'text'},
+    {k:'willmemo', label:'メモ', type:'textarea'}
+   ]},
+  {id:'family', part:3, no:10, title:'家族・親族', sub:'家族の名前と連絡先',
+   lead:'家族・親族の一覧です。相続の手続きでは、誰が相続人になるかを確認する必要があります。',
+   fields:[
+    {k:'people', label:'家族・親族', type:'repeat', rowLabel:'家族', add:'家族を追加する', min:1, titleKey:'name', fields:[
+      {k:'rel', label:'続柄', type:'chips', options:['配偶者','子','孫','父','母','兄弟姉妹','その他']},
+      {k:'name', label:'名前', type:'text'},
+      {k:'born', label:'生まれた年', type:'year'},
+      {k:'alive', label:'', type:'chips', options:['存命','死去']},
+      {k:'contact', label:'住所・連絡先', type:'text'}
+    ]},
+    {k:'familymemo', label:'メモ', type:'textarea', help:'前の配偶者との間の子どもや、養子縁組なども相続に関わります。'}
+   ]},
+  {id:'assets', part:3, no:11, title:'財産', sub:'預貯金・不動産・保険・大切な品',
+   lead:'家族が財産を探すための手がかりです。金額は「だいたい」で大丈夫。口座番号や暗証番号は書かないでください。',
+   fields:[
+    {k:'banks', label:'預貯金', type:'repeat', rowLabel:'口座', add:'口座を追加する', min:0, titleKey:'name', fields:[
+      {k:'name', label:'金融機関名', type:'text', ph:'例：〇〇銀行'},
+      {k:'branch', label:'支店名', type:'text'},
+      {k:'kind', label:'種類', type:'chips', options:['普通','定期','その他']},
+      {k:'to', label:'受け取ってほしい人', type:'text'}
+    ]},
+    {k:'stocks', label:'株式・投資信託など', type:'repeat', rowLabel:'口座', add:'証券口座を追加する', min:0, titleKey:'name', fields:[
+      {k:'name', label:'証券会社名', type:'text'},
+      {k:'items', label:'主な銘柄など', type:'text'},
+      {k:'to', label:'受け取ってほしい人', type:'text'}
+    ]},
+    {k:'estates', label:'不動産', type:'repeat', rowLabel:'不動産', add:'不動産を追加する', min:0, titleKey:'kind', fields:[
+      {k:'kind', label:'種類', type:'chips', options:['土地','建物','マンション','田畑・山林','その他']},
+      {k:'place', label:'所在地', type:'text'},
+      {k:'future', label:'今後どうしてほしいか', type:'chips', options:['家族が住み続ける','売ってよい','貸してよい','未定・家族に任せる']},
+      {k:'to', label:'受け取ってほしい人', type:'text'}
+    ]},
+    {k:'info_estate', type:'info', html:'<b>実家をどうするか、迷っていませんか？</b><br>「売る」「貸す」「まだ決めていない」方は、実家じまいの準備を無料診断で確認できます。<br><a href="https://shindan.2ndlume.com/" target="_blank" rel="noopener" data-track="shindan_click">実家じまい診断を受ける</a>'},
+    {k:'insurances', label:'保険', type:'repeat', rowLabel:'保険', add:'保険を追加する', min:0, titleKey:'company', fields:[
+      {k:'company', label:'保険会社', type:'text'},
+      {k:'kind', label:'種類', type:'chips', options:['生命保険','医療保険','火災・地震保険','自動車保険','その他']},
+      {k:'benef', label:'受取人', type:'text'},
+      {k:'agent', label:'担当者・連絡先', type:'text'}
+    ]},
+    {k:'valuables', label:'貴金属・時計・美術品など', type:'repeat', rowLabel:'品物', add:'品物を追加する', min:0, titleKey:'kind', help:'ゴルフ会員権や車もここに書けます。', fields:[
+      {k:'kind', label:'種類', type:'chips', options:['貴金属・宝石','腕時計','美術品・骨董','着物','車','コレクション','その他']},
+      {k:'desc', label:'品物の内容', type:'text', ph:'例：祖母から受け継いだ翡翠の指輪'},
+      {k:'place', label:'保管場所', type:'text'},
+      {k:'to', label:'渡したい人', type:'text'}
+    ]},
+    {k:'info_value', type:'info', html:'<b>品物の今の価値、ご存じですか？</b><br>価値が分かっていると、誰に何を渡すか決めやすくなります。相続診断士が在籍する買取店で、無料査定をご利用いただけます。<br><a href="#" data-act="consult">無料査定について聞く（準備中）</a>'},
+    {k:'debts', label:'借入・ローン・保証', type:'repeat', rowLabel:'借入', add:'借入を追加する', min:0, titleKey:'lender', help:'借金や、誰かの保証人になっていることも、家族が知っておくべき大切な情報です。', fields:[
+      {k:'lender', label:'借入先', type:'text'},
+      {k:'kind', label:'種類', type:'chips', options:['住宅ローン','カードローン','個人からの借入','保証人になっている','その他']},
+      {k:'amount', label:'残高のめやす', type:'text'}
+    ]},
+    {k:'gifts', label:'生前に贈与したもの', type:'repeat', rowLabel:'贈与', add:'贈与を追加する', min:0, titleKey:'whom', fields:[
+      {k:'whom', label:'贈った相手', type:'text'},
+      {k:'what', label:'内容・金額', type:'text'},
+      {k:'year', label:'贈った年', type:'year'}
+    ]},
+    {k:'assetmemo', label:'メモ', type:'textarea'}
+   ]},
+  {id:'digital', part:3, no:12, title:'契約・デジタル', sub:'スマホ・毎月の支払い・SNS・ペット',
+   lead:'スマホの中身や毎月の支払いは、家族が気づきにくい情報です。解約の手間を減らせます。',
+   fields:[
+    {k:'phone', label:'携帯電話の会社', type:'text', ph:'例：〇〇モバイル'},
+    {k:'phonelock', label:'スマホのロック解除方法', type:'chips', options:['家族に伝えてある','ノートとは別に書き残してある','伝えていない'], help:'パスワードそのものは、このノートには書かないでください。'},
+    {k:'subs', label:'毎月・毎年支払っているサービス', type:'repeat', rowLabel:'サービス', add:'サービスを追加する', min:0, titleKey:'name', help:'動画配信、新聞、会費、クラウドなど', fields:[
+      {k:'name', label:'サービス名', type:'text'},
+      {k:'fee', label:'料金のめやす', type:'text', ph:'例：月1,000円'},
+      {k:'pay', label:'支払方法', type:'chips', options:['クレジットカード','口座引き落とし','その他']}
+    ]},
+    {k:'sns', label:'SNS・ネットのアカウント', type:'repeat', rowLabel:'アカウント', add:'アカウントを追加する', min:0, titleKey:'name', fields:[
+      {k:'name', label:'サービス名', type:'text', ph:'例：Facebook、LINE'},
+      {k:'wish', label:'どうしてほしいか', type:'chips', options:['削除してほしい','追悼用に残してほしい','そのままでよい','家族に任せる']}
+    ]},
+    {k:'pet', label:'ペットのこと', type:'textarea', hints:['名前・種類','かかりつけの動物病院','お世話をお願いしたい人']},
+    {k:'digimemo', label:'メモ', type:'textarea'}
+   ]},
+  {id:'contacts', part:3, no:13, title:'緊急連絡先・保管場所', sub:'連絡先・大切なもののありか',
+   lead:'もしもの時に連絡してほしい人と、大切な書類のありかです。',
+   fields:[
+    {k:'emerg', label:'緊急連絡先', type:'repeat', rowLabel:'連絡先', add:'連絡先を追加する', min:1, titleKey:'name', fields:[
+      {k:'name', label:'名前', type:'text'},
+      {k:'rel', label:'関係', type:'text', ph:'例：長男、友人、弁護士'},
+      {k:'tel', label:'電話番号など', type:'text', mode:'tel'},
+      {k:'when', label:'知らせてほしい時', type:'chips', options:['入院した時','亡くなった時','どちらも']}
+    ]},
+    {k:'p_bankbook', label:'通帳・キャッシュカードの保管場所', type:'text'},
+    {k:'p_seal', label:'印鑑（実印・銀行印）の保管場所', type:'text'},
+    {k:'p_deed', label:'不動産の権利証の保管場所', type:'text'},
+    {k:'p_policy', label:'保険証券の保管場所', type:'text'},
+    {k:'p_pension', label:'年金手帳・年金証書の保管場所', type:'text'},
+    {k:'p_other', label:'その他の大切なもの', type:'textarea', hints:['金庫の場所','貸金庫','マイナンバーカード']}
+   ]}
+];
+var PARTS = {1:'第1部　わたしのこと', 2:'第2部　もしもの時の希望', 3:'第3部　家族に伝える情報'};
+function chapterById(id){ for(var i=0;i<CHAPTERS.length;i++) if(CHAPTERS[i].id===id) return CHAPTERS[i]; return null; }
+var READY = CHAPTERS.filter(function(c){return !c.soon;});
+
+/* ===== 保存 ===== */
+var data = load();
+function load(){
+  try{ var s = localStorage.getItem(STORE_KEY); if(s){ var o = JSON.parse(s); if(o && o.data) return o.data; } }catch(e){}
+  return {};
+}
+var saveTimer = null;
+function save(){
+  try{
+    localStorage.setItem(STORE_KEY, JSON.stringify({app:'nokosu-note', v:1, updated:new Date().toISOString(), data:data}));
+    toast('保存しました');
+  }catch(e){ toast('この端末では保存できませんでした'); }
+}
+function saveSoon(){ clearTimeout(saveTimer); saveTimer = setTimeout(save, 500); }
+function hasData(){ return Object.keys(data).some(function(k){ return filled(data[k]); }); }
+
+/* ===== 表示用の小道具 ===== */
+function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
+function filled(v){
+  if(v==null) return false;
+  if(typeof v==='string') return v.trim()!=='';
+  if(Array.isArray(v)) return v.some(function(r){ return r && Object.keys(r).some(function(k){return filled(r[k]);}); });
+  if(typeof v==='object') return filled(v.y);
+  return false;
+}
+function wareki(y){
+  y = parseInt(y,10); if(!y || y<1868 || y>2100) return '';
+  var e, n;
+  if(y>=2019){e='令和';n=y-2018;} else if(y>=1989){e='平成';n=y-1988;} else if(y>=1926){e='昭和';n=y-1925;} else if(y>=1912){e='大正';n=y-1911;} else {e='明治';n=y-1867;}
+  return e+(n===1?'元':n)+'年';
+}
+function eto(y){ y=parseInt(y,10); if(!y) return ''; return ['申','酉','戌','亥','子','丑','寅','卯','辰','巳','午','未'][y%12]+'年'; }
+function seiza(m,d){
+  m=parseInt(m,10); d=parseInt(d,10); if(!m||!d) return '';
+  var t=[[1,20,'山羊座','水瓶座'],[2,19,'水瓶座','魚座'],[3,21,'魚座','牡羊座'],[4,20,'牡羊座','牡牛座'],[5,21,'牡牛座','双子座'],[6,22,'双子座','蟹座'],
+         [7,23,'蟹座','獅子座'],[8,23,'獅子座','乙女座'],[9,23,'乙女座','天秤座'],[10,24,'天秤座','蠍座'],[11,23,'蠍座','射手座'],[12,22,'射手座','山羊座']][m-1];
+  return d<t[1]?t[2]:t[3];
+}
+function ymdText(v){
+  if(!v||!v.y) return '';
+  var s = v.y+'年'; var w=wareki(v.y); if(w) s+='（'+w+'）';
+  if(v.m) s+=' '+v.m+'月'; if(v.d) s+=v.d+'日';
+  return s;
+}
+function yearText(y){ if(!y) return ''; var w=wareki(y); return y+'年'+(w?'（'+w+'）':''); }
+function todayText(){ var d=new Date(); return d.getFullYear()+'年'+(d.getMonth()+1)+'月'+d.getDate()+'日'; }
+function toast(msg){ var t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(toast._t); toast._t=setTimeout(function(){t.classList.remove('show');},1400); }
+
+/* ===== 進捗 ===== */
+function chapterProgress(ch){
+  if(ch.soon) return null;
+  var fs=ch.fields.filter(function(f){return f.type!=='info';}); var total=fs.length, got=0;
+  fs.forEach(function(f){ if(filled(data[f.k])) got++; });
+  return Math.round(got/total*100);
+}
+function overallProgress(){
+  var list=READY.filter(function(c){return !c.optional;}); var sum=0; list.forEach(function(c){ sum+=chapterProgress(c); }); return Math.round(sum/list.length);
+}
+
+/* ===== 画面：トップ ===== */
+function viewTop(){
+  var cont = hasData();
+  return ''+
+  '<h1>簡単な入力だけで、<br>あなただけの終活ノートができます。</h1>'+
+  '<p class="lead">これまでの歩み、家族への想い、もしもの時の希望。少しずつ書き足して、完成したらPDFで保存・印刷できます。</p>'+
+  '<div class="feat">'+
+    '<div><b>無料・登録不要</b><span class="note">メールアドレスもパスワードも要りません。</span></div>'+
+    '<div><b>少しずつ書ける</b><span class="note">入力は自動で保存。途中でやめても続きから書けます。</span></div>'+
+    '<div><b>情報は端末の中だけ</b><span class="note">入力した内容はこの端末にだけ保存され、外部には送られません。</span></div>'+
+  '</div>'+
+  '<div class="btn-row">'+
+    (cont
+      ? '<a class="btn" href="#toc">続きから書く</a><a class="btn ghost" href="#preview">できたノートを見る</a>'
+      : '<a class="btn" href="#toc">はじめる</a>')+
+  '</div>'+
+  '<div class="card">'+
+    '<b>ほかの端末で書いていた方へ</b>'+
+    '<p class="note" style="margin:.3em 0 0">保存しておいた「バックアップファイル」を読み込むと、続きから書けます。</p>'+
+    '<div class="btn-row"><button class="btn plain" type="button" data-act="import">バックアップを読み込む</button></div>'+
+  '</div>'+
+  '<p class="note" style="margin-top:32px">※サイトの改善のため、Googleアナリティクスでアクセス状況（どの画面が見られたか等）を計測しています。ノートに入力した内容は計測・送信されません。</p>';
+}
+
+/* ===== 画面：目次 ===== */
+function viewToc(){
+  var p = overallProgress();
+  var h = '<h1>目次</h1>'+
+  '<p class="lead">どの章からでも書けます。書けたところまでで、いつでもノートを作れます。</p>'+
+  '<div class="card"><div style="display:flex;justify-content:space-between;align-items:baseline"><b>全体の進み具合</b><span>'+p+'%</span></div>'+
+  '<div class="prog" style="margin-top:8px"><i style="width:'+p+'%"></i></div>'+
+  '<p class="note" style="margin:6px 0 0">※任意の章（自分史）は進み具合に含みません</p>'+
+  '<div class="btn-row"><a class="btn block" href="#preview">ノートを見る・PDFにする</a></div></div>';
+  [1,2,3].forEach(function(part){
+    h += '<div class="part-title">'+PARTS[part]+'</div>';
+    CHAPTERS.filter(function(c){return c.part===part;}).forEach(function(c){
+      var pr = chapterProgress(c);
+      if(c.soon){
+        h += '<button class="ch" type="button" disabled><span class="no">'+c.no+'</span><span class="t"><b>'+esc(c.title)+'</b><span>'+esc(c.sub)+'</span></span><span class="pct">準備中</span></button>';
+      }else{
+        h += '<button class="ch'+(pr===100?' done':'')+'" type="button" data-go="#ch/'+c.id+'"><span class="no">'+(pr===100?'✓':c.no)+'</span><span class="t"><b>'+esc(c.title)+(c.optional?'<span class="opt-badge">任意</span>':'')+'</b><span>'+esc(c.optional?'書きたい方だけ・'+c.sub:c.sub)+'</span></span><span class="pct">'+(pr===0?'未記入':pr+'%')+'</span></button>';
+      }
+    });
+  });
+  h += '<div class="card"><b>データの保管について</b>'+
+       '<p class="note" style="margin:.3em 0 0">入力内容はこの端末のブラウザの中にだけ保存されています。機種変更やブラウザの履歴消去で消えることがあるので、時々バックアップを保存しておくと安心です。</p>'+
+       '<div class="btn-row"><button class="btn plain" type="button" data-act="export">バックアップを保存</button><button class="btn plain" type="button" data-act="import">バックアップを読み込む</button><button class="btn plain" type="button" data-act="clear" style="color:#a33">すべて消去</button></div></div>';
+  return h;
+}
+
+/* ===== 画面：章の入力 ===== */
+function fieldHtml(f, val, ctx){
+  // ctx: {rk, ri} repeat context or null
+  if(f.type==='info') return '<div class="hints" style="font-size:.9rem;margin:18px 0">'+f.html+'</div>';
+  var attrs = ctx ? ' data-rk="'+ctx.rk+'" data-ri="'+ctx.ri+'" data-sk="'+f.k+'"' : ' data-k="'+f.k+'"';
+  var id = 'f_'+(ctx?ctx.rk+'_'+ctx.ri+'_':'')+f.k;
+  var h = '<div class="field">';
+  var lblTag = (f.type==='chips'||f.type==='ymd') ? '<span class="lbl">' : '<label for="'+id+'">';
+  var lblEnd = (f.type==='chips'||f.type==='ymd') ? '</span>' : '</label>';
+  if(f.label) h += lblTag+esc(f.label)+(f.req?'<span class="req">必須</span>':'')+lblEnd;
+  if(f.help) h += '<p class="help">'+esc(f.help)+'</p>';
+  if(f.type==='text'){
+    h += '<input type="text" id="'+id+'"'+attrs+' value="'+esc(val||'')+'"'+(f.ph?' placeholder="'+esc(f.ph)+'"':'')+(f.mode?' inputmode="'+f.mode+'"':'')+'>';
+  }else if(f.type==='textarea'){
+    if(f.hints) h += '<div class="hints"><b>たとえば、こんなことを</b>'+f.hints.map(esc).join('／')+'</div>';
+    h += '<textarea id="'+id+'"'+attrs+'>'+esc(val||'')+'</textarea>';
+  }else if(f.type==='year'){
+    h += '<div class="ymd"><input type="text" id="'+id+'"'+attrs+' inputmode="numeric" maxlength="4" placeholder="例：1975" value="'+esc(val||'')+'"><span>年</span><span class="wareki" data-wareki-for="'+id+'">'+esc(wareki(val))+'</span></div>';
+  }else if(f.type==='chips'){
+    h += '<div class="chips">'+f.options.map(function(o){
+      return '<button type="button" class="chip'+(val===o?' on':'')+'"'+attrs+' data-v="'+esc(o)+'">'+esc(o)+'</button>';
+    }).join('')+'</div>';
+  }else if(f.type==='ymd'){
+    val = val||{};
+    var ms='<option value="">月</option>', ds='<option value="">日</option>';
+    for(var m=1;m<=12;m++) ms+='<option'+(String(val.m)===String(m)?' selected':'')+'>'+m+'</option>';
+    for(var d=1;d<=31;d++) ds+='<option'+(String(val.d)===String(d)?' selected':'')+'>'+d+'</option>';
+    h += '<div class="ymd"><input type="text" id="'+id+'_y" data-k="'+f.k+'" data-part="y" inputmode="numeric" maxlength="4" placeholder="例：1955" value="'+esc(val.y||'')+'" aria-label="生まれた年（西暦）"><span>年</span>'+
+         '<span class="wareki" data-wareki-for="'+id+'_y">'+esc(wareki(val.y))+'</span>'+
+         '<select data-k="'+f.k+'" data-part="m" aria-label="月">'+ms+'</select><span>月</span>'+
+         '<select data-k="'+f.k+'" data-part="d" aria-label="日">'+ds+'</select><span>日</span></div>'+
+         '<p class="help" style="margin-top:6px">年は西暦で入力してください（和暦は自動で表示されます）。</p>'+
+         '<div class="derived" data-derived="'+f.k+'">'+derivedText(val)+'</div>';
+  }else if(f.type==='repeat'){
+    var rows = Array.isArray(val) && val.length ? val : [];
+    while(rows.length < (f.min||0)) rows.push({});
+    h += rows.map(function(r,i){
+      return '<div class="row"><div class="row-head"><b>'+esc(f.rowLabel)+' '+(i+1)+'</b>'+
+        (rows.length>(f.min||0)?'<button type="button" class="del" data-del="'+f.k+'" data-ri="'+i+'">この'+esc(f.rowLabel)+'を削除</button>':'')+'</div>'+
+        f.fields.map(function(sf){ return fieldHtml(sf, r[sf.k], {rk:f.k, ri:i}); }).join('')+'</div>';
+    }).join('');
+    h += '<button type="button" class="btn ghost" data-add="'+f.k+'" data-min="'+(f.min||0)+'">＋ '+esc(f.add)+'</button>';
+  }
+  return h+'</div>';
+}
+function derivedText(v){
+  if(!v||!v.y) return '';
+  var parts=[]; var e=eto(v.y); if(e) parts.push('干支：'+e); var s=seiza(v.m,v.d); if(s) parts.push('星座：'+s);
+  return parts.length ? parts.join('　') : '';
+}
+function viewChapter(id){
+  var ch = chapterById(id); if(!ch || ch.soon) return viewToc();
+  var idx = READY.indexOf(ch), next = READY[idx+1];
+  var h = '<button class="crumb" type="button" data-go="#toc">← 目次に戻る</button>'+
+    '<div class="note">'+PARTS[ch.part]+'　第'+ch.no+'章</div>'+
+    '<h1>'+esc(ch.title)+(ch.optional?'<span class="opt-badge">任意</span>':'')+'</h1><p class="lead">'+esc(ch.lead)+'</p>'+
+    (ch.optional?'<div class="hints">この章は<b style="display:inline;color:inherit">任意</b>です。家族への事務連絡には必要ありません。書きたい方だけ、書きたいところだけで大丈夫です。</div>':'')+
+    '<div id="form">'+ch.fields.map(function(f){ return fieldHtml(f, data[f.k], null); }).join('')+'</div>'+
+    '<p class="note">入力した内容は自動で保存されます。</p>'+
+    '<div class="chnav">'+
+      '<button class="btn plain" type="button" data-go="#toc">目次に戻る</button>'+
+      (next ? '<button class="btn" type="button" data-go="#ch/'+next.id+'">次の章へ</button>' : '<button class="btn" type="button" data-go="#preview">ノートを見る</button>')+
+    '</div>';
+  if(ch.id==='basic') h = '<div class="warnbox no-print" style="margin-bottom:16px">銀行の口座番号・暗証番号・パスワードは、このノートには書かないでください。印刷したノートは家族以外の目に触れることもあります。</div>' + h;
+  return h;
+}
+
+/* ===== 画面：プレビュー（ノート本体） ===== */
+function sv0(r,sf){ return r[sf.k]; }
+function noteRow(label, v){ return '<tr><th>'+esc(label)+'</th><td>'+esc(v)+'</td></tr>'; }
+function renderNote(showEmpty){
+  var name = (data.name||'').trim();
+  var h = '<div class="cover"><p class="ttl">のこすノート</p><div class="who">'+(name?esc(name)+'　のノート':'わたしのノート')+'</div><div class="dt">作成日　'+todayText()+'</div></div>';
+  READY.forEach(function(ch){
+    var body = '', rows = '';
+    function flushRows(){ if(rows){ body += '<table>'+rows+'</table>'; rows=''; } }
+    ch.fields.forEach(function(f){
+      var v = data[f.k];
+      if(f.type==='info') return;
+      if(f.type==='textarea'){
+        flushRows();
+        if(filled(v)) body += '<h4>'+esc(f.label)+'</h4><div class="txt">'+esc(v)+'</div>';
+        else if(showEmpty) body += '<h4>'+esc(f.label)+'</h4><div class="txt blank"></div>';
+      }else if(f.type==='repeat'){
+        flushRows();
+        var list = Array.isArray(v) ? v.filter(function(r){ return filled([r]); }) : [];
+        if(!list.length && showEmpty) list = [{}];
+        if(list.length && f.min===0) body += '<h4 class="grp">'+esc(f.label)+'</h4>';
+        list.forEach(function(r,i){
+          var t = f.rowLabel+(list.length>1?' '+(i+1):'');
+          if(f.k==='schools' && r.kind) t = r.kind;
+          if(f.k==='messages' && r.to) t = r.to;
+          if(f.titleKey && filled(r[f.titleKey])) t = r[f.titleKey];
+          body += '<h4>'+esc(t)+'</h4>';
+          var sub='';
+          f.fields.forEach(function(sf){
+            if(f.k==='schools'&&sf.k==='kind') return;
+            if(f.k==='messages'&&sf.k==='to') return;
+            if(f.titleKey===sf.k && filled(sv0(r,sf))) return;
+            var sv = r[sf.k];
+            if(sf.type==='textarea'){
+              if(sub){ body+='<table>'+sub+'</table>'; sub=''; }
+              if(filled(sv)) body += '<div class="txt">'+esc(sv)+'</div>';
+              else if(showEmpty) body += '<div class="txt blank"></div>';
+            }else{
+              var txt = sf.type==='year' ? yearText(sv) : (sv||'');
+              if(filled(txt)||showEmpty) sub += noteRow(sf.label||'状況', txt);
+            }
+          });
+          if(sub) body+='<table>'+sub+'</table>';
+        });
+      }else{
+        var txt = f.type==='ymd' ? ymdText(v) : (v||'');
+        if(f.type==='ymd' && v && v.y){ var dv=derivedText(v); if(dv) txt += '\n'+dv.replace('　',' ／ '); }
+        if(filled(txt)||showEmpty) rows += '<tr><th>'+esc(f.label)+'</th><td style="white-space:pre-wrap">'+esc(txt)+'</td></tr>';
+      }
+    });
+    flushRows();
+    if(!body) return;
+    h += '<section class="chap"><h3>第'+ch.no+'章　'+esc(ch.title)+'</h3>'+body+'</section>';
+  });
+  var FOOT = '<div class="foot">このノートは「のこすノート｜無料で作れる終活ノート」で作成しました。</div>';
+  var withApx = h.indexOf('class="chap"')>=0 || showEmpty;
+  if(withApx) h += APPENDIX.replace(/<\/section>$/, FOOT+'</section>');
+  if(h.indexOf('class="chap"')<0) h += '<p class="empty-msg" style="text-align:center">まだ何も記入されていません。目次から書きはじめましょう。</p>';
+  if(!withApx) h += FOOT;
+  return h;
+}
+var APPENDIX = '<section class="chap"><h3>付録1　もしもの時の主な手続き</h3>'+
+ '<p style="font-size:.9rem">亡くなった後の主な手続きと期限のめやすです。窓口や必要書類は市区町村などで異なるため、各窓口や専門家に確認してください。</p>'+
+ '<table><tr><th style="width:22%">期限のめやす</th><th style="width:48%;background:#f5f5f2">手続き</th><th style="background:#f5f5f2">主な窓口</th></tr>'+
+ [['7日以内','死亡届の提出・火葬許可の申請','市区町村役場'],
+  ['10日〜14日以内','年金の受給停止（厚生年金は10日、国民年金は14日）','年金事務所'],
+  ['14日以内','国民健康保険・介護保険の資格喪失、世帯主の変更','市区町村役場'],
+  ['すみやかに','遺言書の確認（自宅で見つかった自筆の遺言書は家庭裁判所の検認が必要）','家庭裁判所'],
+  ['3か月以内','相続放棄・限定承認の申述','家庭裁判所'],
+  ['4か月以内','亡くなった人の所得税の申告（準確定申告）','税務署'],
+  ['10か月以内','相続税の申告・納付（必要な場合）','税務署'],
+  ['2年以内','葬祭費・埋葬料の請求','市区町村役場・健康保険組合'],
+  ['3年以内','不動産の名義変更（相続登記）、死亡保険金の請求','法務局・保険会社'],
+  ['5年以内','遺族年金の請求','年金事務所']].map(function(r){return '<tr><td>'+r[0]+'</td><td>'+r[1]+'</td><td>'+r[2]+'</td></tr>';}).join('')+
+ '</table></section>'+
+ '<section class="chap"><h3>付録2　用語集</h3><table>'+
+ [['被相続人','亡くなって財産を残す人。'],
+  ['相続人','財産を引き継ぐ人。配偶者は常に相続人になり、子、親、兄弟姉妹の順に加わります。'],
+  ['法定相続分','法律で決められた取り分のめやす。遺言や相続人の話し合いで変えることができます。'],
+  ['遺留分','兄弟姉妹以外の相続人に保障された、最低限の取り分。'],
+  ['遺産分割協議','相続人全員で、誰が何を受け取るかを話し合って決めること。'],
+  ['相続放棄','財産も借金も一切引き継がないこと。原則として、相続を知った時から3か月以内に家庭裁判所へ申し出ます。'],
+  ['限定承認','受け取る財産の範囲内でだけ借金を引き継ぐ方法。相続人全員で申し出る必要があります。'],
+  ['公正証書遺言','公証役場で公証人が作成する遺言。原本は公証役場に保管されます。'],
+  ['自筆証書遺言','自分で書く遺言。法務局に預ける制度もあります。'],
+  ['遺言執行者','遺言の内容を実現するための手続きを行う人。'],
+  ['任意後見','判断能力があるうちに、将来の支援者を自分で選んで契約しておく制度。'],
+  ['法定後見','判断能力が不十分になった後に、家庭裁判所が支援者を選ぶ制度。'],
+  ['相続税の基礎控除','3,000万円＋600万円×法定相続人の数。遺産の合計がこれ以下なら相続税はかかりません。'],
+  ['相続登記','不動産の名義を相続人に変える手続き。2024年4月から義務になり、相続を知った日から3年以内に行う必要があります。'],
+  ['相続診断士','相続の悩みを聞き、家族が円満に相続を迎えられるよう、必要に応じて専門家につなぐ人。']].map(function(r){return '<tr><th>'+r[0]+'</th><td>'+r[1]+'</td></tr>';}).join('')+
+ '</table></section>';
+var showEmpty = false;
+function viewPreview(){
+  return '<div class="no-print">'+
+    '<button class="crumb" type="button" data-go="#toc">← 目次に戻る</button>'+
+    '<h1>できたノート</h1>'+
+    '<p class="lead">これが印刷・PDFになるノートです。書き足したい所があれば、目次から戻って書けます。</p>'+
+    '<div class="card"><b>PDFにする・印刷する</b>'+
+      '<p class="note" style="margin:.3em 0 0">下のボタンを押すと印刷画面が開きます。パソコンでは「送信先」で「PDFに保存」を、スマホでは共有ボタンから「ファイルに保存」を選んでください。</p>'+
+      '<label class="opt"><input type="checkbox" id="optEmpty"'+(showEmpty?' checked':'')+'> 未記入の項目も空欄で印刷する（あとで手書きできます）</label>'+
+      '<div class="btn-row"><button class="btn block" type="button" data-act="print">PDFにする・印刷する</button></div>'+
+    '</div>'+
+  '</div>'+
+  '<div class="paper" id="paper">'+renderNote(showEmpty)+'</div>'+
+  '<div class="no-print">'+
+    '<div class="card"><b>相続や実家のこと、気になっていませんか？</b>'+
+      '<p class="note" style="margin:.3em 0 0">相続診断士が、ノートの内容をもとに無料でご相談をお受けしています。実家じまいの準備が気になる方は、無料の診断もお使いください。</p>'+
+      '<div class="btn-row"><a class="btn ghost" href="#" data-act="consult">無料で相談する（準備中）</a><a class="btn plain" href="https://shindan.2ndlume.com/" target="_blank" rel="noopener" data-track="shindan_click">実家じまい診断を受ける</a></div>'+
+    '</div>'+
+    '<div class="card"><b>年に1回、見直しのお知らせを受け取る</b>'+
+      '<p class="note" style="margin:.3em 0 0">家族構成や気持ちは変わっていくもの。年に1回、見直しのタイミングをメールでお知らせします。（準備中）</p>'+
+    '</div>'+
+  '</div>';
+}
+
+/* ===== アクセス計測（入力内容は送信しない） ===== */
+function track(name, params){
+  try{ if(typeof window.gtag==='function') window.gtag('event', name, Object.assign({app_name:'nokosu-note'}, params||{})); }catch(e){}
+}
+function screenName(h){
+  if(h.indexOf('#ch/')===0){ var c=chapterById(h.slice(4)); return c ? '第'+c.no+'章 '+c.title : '章'; }
+  return {'#toc':'目次','#preview':'できたノート'}[h] || 'トップ';
+}
+
+/* ===== ルーティング ===== */
+var app = document.getElementById('app');
+function route(){
+  var hsh = location.hash || '#top';
+  var html;
+  if(hsh.indexOf('#ch/')===0) html = viewChapter(hsh.slice(4));
+  else if(hsh==='#toc') html = viewToc();
+  else if(hsh==='#preview') html = viewPreview();
+  else html = viewTop();
+  app.innerHTML = html;
+  window.scrollTo(0,0);
+  track('page_view', {page_title:'のこすノート｜'+screenName(hsh), page_location:location.origin+location.pathname+hsh});
+}
+window.addEventListener('hashchange', route);
+
+/* ===== 入力の反映 ===== */
+function setFromEl(el){
+  var v = el.value;
+  if(el.dataset.rk){
+    var arr = Array.isArray(data[el.dataset.rk]) ? data[el.dataset.rk] : [];
+    var i = parseInt(el.dataset.ri,10);
+    while(arr.length<=i) arr.push({});
+    arr[i][el.dataset.sk] = v; data[el.dataset.rk] = arr;
+  }else if(el.dataset.part){
+    var o = (data[el.dataset.k] && typeof data[el.dataset.k]==='object') ? data[el.dataset.k] : {};
+    o[el.dataset.part] = v; data[el.dataset.k] = o;
+    var dv = document.querySelector('[data-derived="'+el.dataset.k+'"]'); if(dv) dv.textContent = derivedText(o);
+  }else{
+    data[el.dataset.k] = v;
+  }
+  if(el.id){ var w = document.querySelector('[data-wareki-for="'+el.id+'"]'); if(w) w.textContent = wareki(v); }
+}
+app.addEventListener('input', function(e){
+  var el = e.target;
+  if(el.dataset && (el.dataset.k || el.dataset.rk) && !el.classList.contains('chip')){ setFromEl(el); saveSoon(); }
+});
+app.addEventListener('change', function(e){
+  var el = e.target;
+  if(el.id==='optEmpty'){ showEmpty = el.checked; document.getElementById('paper').innerHTML = renderNote(showEmpty); return; }
+  if(el.tagName==='SELECT' && el.dataset.k){ setFromEl(el); saveSoon(); }
+});
+app.addEventListener('click', function(e){
+  var el = e.target.closest('button, a'); if(!el) return;
+  if(el.dataset.track) track(el.dataset.track);
+  if(el.dataset.go){ location.hash = el.dataset.go; return; }
+  if(el.classList.contains('chip')){
+    var cur = el.dataset.rk ? ((data[el.dataset.rk]||[])[el.dataset.ri]||{})[el.dataset.sk] : data[el.dataset.k];
+    var nv = (cur===el.dataset.v) ? '' : el.dataset.v;
+    if(el.dataset.rk){
+      var arr = Array.isArray(data[el.dataset.rk]) ? data[el.dataset.rk] : [];
+      var i = parseInt(el.dataset.ri,10); while(arr.length<=i) arr.push({});
+      arr[i][el.dataset.sk] = nv; data[el.dataset.rk] = arr;
+    }else data[el.dataset.k] = nv;
+    var sib = el.parentNode.querySelectorAll('.chip');
+    for(var j=0;j<sib.length;j++) sib[j].classList.toggle('on', sib[j].dataset.v===nv && nv!=='');
+    save(); return;
+  }
+  if(el.dataset.add){
+    var k = el.dataset.add, mn = parseInt(el.dataset.min||'0',10), a = Array.isArray(data[k]) ? data[k] : [];
+    while(a.length < mn) a.push({});
+    a.push({}); data[k] = a; save(); rerenderKeepScroll(); return;
+  }
+  if(el.dataset.del){
+    if(!confirm('この欄の内容を削除しますか？')) return;
+    var dk = el.dataset.del, da = Array.isArray(data[dk]) ? data[dk] : [];
+    da.splice(parseInt(el.dataset.ri,10),1); data[dk] = da; save(); rerenderKeepScroll(); return;
+  }
+  var act = el.dataset.act;
+  if(act==='print'){ track('pdf_print', {progress:overallProgress(), with_blank:showEmpty?'yes':'no'}); window.print(); }
+  else if(act==='export'){ exportBackup(); }
+  else if(act==='import'){ document.getElementById('importFile').click(); }
+  else if(act==='clear'){
+    if(confirm('入力した内容をすべて消去します。元に戻せません。よろしいですか？')){
+      data = {}; try{ localStorage.removeItem(STORE_KEY); }catch(err){} toast('消去しました'); route();
+    }
+  }
+  else if(act==='consult'){ e.preventDefault(); track('consult_click'); alertBox('相談窓口は準備中です。'); }
+});
+function alertBox(msg){ toast(msg); }
+function rerenderKeepScroll(){ var y = window.scrollY; route(); window.scrollTo(0,y); }
+
+/* ===== バックアップ ===== */
+function exportBackup(){
+  try{
+    var blob = new Blob([JSON.stringify({app:'nokosu-note', v:1, exported:new Date().toISOString(), data:data}, null, 2)], {type:'application/json'});
+    var d = new Date(), stamp = d.getFullYear()+String(d.getMonth()+1).padStart(2,'0')+String(d.getDate()).padStart(2,'0');
+    var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'nokosu-note-backup-'+stamp+'.json';
+    document.body.appendChild(a); a.click(); setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); }, 500);
+    toast('バックアップを保存しました'); track('backup_export');
+  }catch(e){ toast('保存できませんでした'); }
+}
+document.getElementById('importFile').addEventListener('change', function(){
+  var f = this.files && this.files[0]; if(!f) return;
+  var r = new FileReader();
+  r.onload = function(){
+    try{
+      var o = JSON.parse(r.result);
+      if(!o || o.app!=='nokosu-note' || !o.data) throw new Error('bad');
+      if(hasData() && !confirm('今この端末にある内容を、バックアップの内容で置き換えます。よろしいですか？')) return;
+      data = o.data; save(); toast('読み込みました'); track('backup_import'); location.hash = '#toc'; route();
+    }catch(e){ toast('このファイルは読み込めませんでした'); }
+  };
+  r.readAsText(f); this.value='';
+});
+
+/* ===== 文字サイズ ===== */
+var fsBtn = document.getElementById('fsToggle');
+function applyFs(large){ document.documentElement.classList.toggle('large', large); fsBtn.textContent = large ? '文字を標準に' : '文字を大きく'; }
+var large=false; try{ large = localStorage.getItem(UI_KEY)==='large'; }catch(e){}
+applyFs(large);
+fsBtn.addEventListener('click', function(){ large=!large; applyFs(large); try{ localStorage.setItem(UI_KEY, large?'large':''); }catch(e){} });
+
+route();
+})();
+</script>
+</body>
+</html>
