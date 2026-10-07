@@ -91,6 +91,12 @@ textarea{min-height:140px;resize:vertical}
 .chnav{display:flex;gap:12px;margin-top:32px}
 .chnav .btn{flex:1}
 .crumb{background:none;border:none;color:var(--accent);font-size:.9rem;cursor:pointer;padding:0;margin-bottom:8px}
+.ad{margin:20px 0;padding:12px 14px;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface)}
+.ad .ad-head{display:flex;justify-content:space-between;align-items:center;font-size:.85rem;color:var(--sub);margin-bottom:8px}
+.ad .pr{font-size:.7rem;border:1px solid #bbb;border-radius:4px;padding:0 6px;color:#777}
+.ad .ban{display:flex;flex-direction:column;align-items:center;gap:12px}
+.ad .ban img{max-width:100%;height:auto}
+.ad .ban a{line-height:0}
 .toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:#333;color:#fff;padding:8px 18px;border-radius:999px;font-size:.85rem;opacity:0;transition:opacity .3s;pointer-events:none;z-index:20}
 .toast.show{opacity:.92}
 /* paper (preview & print) */
@@ -251,7 +257,8 @@ var CHAPTERS = [
     {k:'butsudan', label:'仏壇', type:'chips', options:['ある','ない']},
     {k:'butsudanwish', label:'仏壇をどうしてほしいか', type:'chips', options:['引き継いでほしい','処分してよい','家族に任せる']},
     {k:'gcost2', label:'お墓・仏壇の費用', type:'chips', options:COST},
-    {k:'gravememo', label:'メモ', type:'textarea'}
+    {k:'gravememo', label:'メモ', type:'textarea'},
+    {k:'ad_grave', type:'ad', keys:['cleanup'], title:'仏壇や家財の整理を相談する'}
    ]},
   {id:'will', part:2, no:9, title:'遺言', sub:'遺言書の有無・保管場所',
    lead:'遺言書があるかどうか、どこにあるかを家族に伝えておきましょう。',
@@ -295,6 +302,7 @@ var CHAPTERS = [
       {k:'to', label:'受け取ってほしい人', type:'text'}
     ]},
     {k:'info_estate', type:'info', html:'<b>実家をどうするか、迷っていませんか？</b><br>「売る」「貸す」「まだ決めていない」方は、実家じまいの準備を無料診断で確認できます。<br><a href="https://shindan.2ndlume.com/" target="_blank" rel="noopener" data-track="shindan_click">実家じまい診断を受ける</a>'},
+    {k:'ad_estate', type:'ad', keys:['realestate_sale'], title:'実家・不動産の価格を知っておく'},
     {k:'insurances', label:'保険', type:'repeat', rowLabel:'保険', add:'保険を追加する', min:0, titleKey:'company', fields:[
       {k:'company', label:'保険会社', type:'text'},
       {k:'kind', label:'種類', type:'chips', options:['生命保険','医療保険','火災・地震保険','自動車保険','その他']},
@@ -358,6 +366,21 @@ var PARTS = {1:'第1部　わたしのこと', 2:'第2部　もしもの時の�
 function chapterById(id){ for(var i=0;i<CHAPTERS.length;i++) if(CHAPTERS[i].id===id) return CHAPTERS[i]; return null; }
 var READY = CHAPTERS.filter(function(c){return !c.soon;});
 
+/* ===== アフィリエイト（A8.net）バナー =====
+   リンクを差し替えるときは、この中の html だけを書き換えてください。 */
+var AFFILIATE = {
+  realestate_sale: {label:'不動産売却査定', html:'<a href="https://px.a8.net/svt/ejp?a8mat=4BCAZD+DEULXE+4I6M+65ME9" rel="nofollow sponsored" target="_blank" data-track="ad_click_realestate_sale"><img border="0" width="300" height="250" alt="不動産売却査定" src="https://www22.a8.net/svt/bgt?aid=260914585811&wid=003&eno=01&mid=s00000021019001034000&mc=1"></a><img border="0" width="1" height="1" src="https://www13.a8.net/0.gif?a8mat=4BCAZD+DEULXE+4I6M+65ME9" alt="">'},
+  cleanup: {label:'遺品整理・生前整理', html:'<a href="https://px.a8.net/svt/ejp?a8mat=4BC36K+64AG5E+39GM+5MGG9D" rel="nofollow sponsored" target="_blank" data-track="ad_click_cleanup"><img border="0" width="320" height="50" alt="遺品整理・生前整理" src="https://www28.a8.net/svt/bgt?aid=260904476370&wid=003&eno=01&mid=s00000015223034005000&mc=1"></a><img border="0" width="1" height="1" src="https://www10.a8.net/0.gif?a8mat=4BC36K+64AG5E+39GM+5MGG9D" alt="">'},
+  moving: {label:'引っ越し', html:'<a href="https://px.a8.net/svt/ejp?a8mat=4BCAZD+9RVADU+4HN6+TSQTT" rel="nofollow sponsored" target="_blank" data-track="ad_click_moving"><img border="0" width="320" height="50" alt="引っ越し見積もり" src="https://www21.a8.net/svt/bgt?aid=260914585591&wid=005&eno=01&mid=s00000020949005005000&mc=1"></a><img border="0" width="1" height="1" src="https://www16.a8.net/0.gif?a8mat=4BCAZD+9RVADU+4HN6+TSQTT" alt="">'},
+  print: {label:'印刷・製本', html:'<a href="https://px.a8.net/svt/ejp?a8mat=4BEAWZ+B89FMA+2K4E+64RJ5" rel="nofollow sponsored" target="_blank" data-track="ad_click_print"><img border="0" width="300" height="250" alt="印刷・製本" src="https://www28.a8.net/svt/bgt?aid=261007811679&wid=005&eno=01&mid=s00000011939001030000&mc=1"></a><img border="0" width="1" height="1" src="https://www17.a8.net/0.gif?a8mat=4BEAWZ+B89FMA+2K4E+64RJ5" alt="">'}
+};
+function adBlock(keys, title){
+  var items = keys.filter(function(k){ return AFFILIATE[k] && AFFILIATE[k].html; });
+  if(!items.length) return '';
+  return '<div class="ad no-print"><div class="ad-head"><span>'+esc(title)+'</span><span class="pr">広告</span></div><div class="ban">'+
+    items.map(function(k){ return AFFILIATE[k].html; }).join('')+'</div></div>';
+}
+
 /* ===== 保存 ===== */
 var data = load();
 function load(){
@@ -409,7 +432,7 @@ function toast(msg){ var t=document.getElementById('toast'); t.textContent=msg; 
 /* ===== 進捗 ===== */
 function chapterProgress(ch){
   if(ch.soon) return null;
-  var fs=ch.fields.filter(function(f){return f.type!=='info';}); var total=fs.length, got=0;
+  var fs=ch.fields.filter(function(f){return f.type!=='info' && f.type!=='ad';}); var total=fs.length, got=0;
   fs.forEach(function(f){ if(filled(data[f.k])) got++; });
   return Math.round(got/total*100);
 }
@@ -470,6 +493,7 @@ function viewToc(){
 /* ===== 画面：章の入力 ===== */
 function fieldHtml(f, val, ctx){
   // ctx: {rk, ri} repeat context or null
+  if(f.type==='ad') return adBlock(f.keys, f.title);
   if(f.type==='info') return '<div class="hints" style="font-size:.9rem;margin:18px 0">'+f.html+'</div>';
   var attrs = ctx ? ' data-rk="'+ctx.rk+'" data-ri="'+ctx.ri+'" data-sk="'+f.k+'"' : ' data-k="'+f.k+'"';
   var id = 'f_'+(ctx?ctx.rk+'_'+ctx.ri+'_':'')+f.k;
@@ -545,7 +569,7 @@ function renderNote(showEmpty){
     function flushRows(){ if(rows){ body += '<table>'+rows+'</table>'; rows=''; } }
     ch.fields.forEach(function(f){
       var v = data[f.k];
-      if(f.type==='info') return;
+      if(f.type==='info' || f.type==='ad') return;
       if(f.type==='textarea'){
         flushRows();
         if(filled(v)) body += '<h4>'+esc(f.label)+'</h4><div class="txt">'+esc(v)+'</div>';
@@ -637,6 +661,7 @@ function viewPreview(){
       '<label class="opt"><input type="checkbox" id="optEmpty"'+(showEmpty?' checked':'')+'> 未記入の項目も空欄で印刷する（あとで手書きできます）</label>'+
       '<div class="btn-row"><button class="btn block" type="button" data-act="print">PDFにする・印刷する</button></div>'+
     '</div>'+
+    adBlock(['print'], '冊子にして、きれいに残したい方へ')+
   '</div>'+
   '<div class="paper" id="paper">'+renderNote(showEmpty)+'</div>'+
   '<div class="no-print">'+
@@ -644,6 +669,7 @@ function viewPreview(){
       '<p class="note" style="margin:.3em 0 0">相続診断士が、ノートの内容をもとに無料でご相談をお受けしています。実家じまいの準備が気になる方は、無料の診断もお使いください。</p>'+
       '<div class="btn-row"><a class="btn ghost" href="#" data-act="consult">無料で相談する（準備中）</a><a class="btn plain" href="https://shindan.2ndlume.com/" target="_blank" rel="noopener" data-track="shindan_click">実家じまい診断を受ける</a></div>'+
     '</div>'+
+    adBlock(['cleanup','moving'], '身の回りの整理・住み替えに')+
     '<div class="card"><b>年に1回、見直しのお知らせを受け取る</b>'+
       '<p class="note" style="margin:.3em 0 0">家族構成や気持ちは変わっていくもの。年に1回、見直しのタイミングをメールでお知らせします。（準備中）</p>'+
     '</div>'+
